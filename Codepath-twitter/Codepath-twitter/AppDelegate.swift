@@ -51,8 +51,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print("Access token retrieved")
             
             twitterClient?.get("1.1/account/verify_credentials.json", parameters: nil, progress: nil, success: {(task: URLSessionDataTask?, response: Any?) -> Void in
-                print("account: \(response)")}, failure: {(task: URLSessionDataTask?, error: Error?) -> Void in
-                    print("Error verifying credentials: \(error.debugDescription)")})
+                let userDictionary = response as! NSDictionary
+                
+                let user = User(dictionary: userDictionary)
+                
+                print(user.name!)
+                print(user.screenname!)
+                print(user.tagline!)
+                
+            }, failure: {(task: URLSessionDataTask?, error: Error?) -> Void in
+                print("Error verifying credentials: \(error.debugDescription)")
+            })
+            
+            
         }, failure: {(error: Error?) -> Void in
                 print("Error retrieving token: \(error.debugDescription)")
         })
