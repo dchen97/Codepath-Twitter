@@ -12,6 +12,7 @@ import BDBOAuth1Manager
 class LogInViewController: UIViewController {
 
     @IBOutlet weak var loginButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -34,18 +35,14 @@ class LogInViewController: UIViewController {
     }
     */
     @IBAction func onLoginButton(_ sender: Any) {
-        let twitterClient = BDBOAuth1SessionManager(baseURL: NSURL(string: "https://api.twitter.com")! as URL!, consumerKey: "GHtENRfBhtsDFMUW0cOaDMPGF", consumerSecret: 	"t3eZta2rcIoaCQTvksodTSemV4uBRFlQyMOu7HahDroXnORdgO")
+        let client = TwitterClient.sharedInstance
         
-        twitterClient?.deauthorize()
-        
-        twitterClient?.fetchRequestToken(withPath: "oauth/request_token", method: "GET", callbackURL: NSURL(string: "mycodepath-twitter://oauth") as URL!, scope: nil, success: {(requestToken: BDBOAuth1Credential?) -> Void in
-                print("I got a token!")
-                let urlString = "https://api.twitter.com/oauth/authorize?oauth_token=\((requestToken?.token)! as String)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-                let url = URL(string: urlString!)
-                UIApplication.shared.openURL(url as! URL!)
-        }, failure: {(error: Error?) -> Void in print("There was an error getting token.\n error:\(error?.localizedDescription)")})
-        
-        
+        client?.login(success: {
+            print("I've logged in!")
+            self.performSegue(withIdentifier: "loginSegue", sender: nil)
+        }) { (error: Error) in
+            print("Error: \(error.localizedDescription)")
+        }
     }
 
 }
