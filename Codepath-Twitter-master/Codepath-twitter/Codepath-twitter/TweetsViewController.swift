@@ -81,13 +81,9 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         cell.replyButton.setImage(UIImage(named: "reply-icon"), for: .normal)
         
-        cell.favoritesButton.addTarget(self, action: #selector(TweetsViewController.onFavoriteButton), for: .touchUpInside)
         cell.idString = tweet.idString
-        return cell
-    }
-    
-    func onFavoriteButton() {
         
+        return cell
     }
     
 
@@ -102,6 +98,17 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
     */
     @IBAction func onLogoutButton(_ sender: Any) {
         TwitterClient.sharedInstance?.logout()
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        //let indexPath = tableView.indexPath(for: cell)
+        let tweet = tweets[(self.tableView.indexPathForSelectedRow?.row)!]
+        let detailViewController = segue.destination as! TweetDetailsViewController
+        detailViewController.tweet = tweet
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //self.performSegue(withIdentifier: "goToTweetDetails", sender: self)
     }
 
 }

@@ -62,6 +62,16 @@ class TwitterClient: BDBOAuth1SessionManager {
 
     }
     
+    func unfavorite(idString: String, params: NSDictionary?, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
+        post("1.1/favorites/destroy.json?id=\(idString)", parameters: params, success: { (task: URLSessionDataTask, response: Any?) in
+                success()
+        }, failure: { (task: URLSessionDataTask?, error: Error) in
+                failure(error)
+        })
+    }
+    
+    //func untweet()
+    
     func logout() {
         User.currentUser = nil
         deauthorize()

@@ -36,6 +36,7 @@ class TweetViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+        
     }
 
     @IBAction func onRetweetButton(_ sender: Any) {
@@ -50,12 +51,30 @@ class TweetViewCell: UITableViewCell {
     }
     
     @IBAction func onFavoriteButton(_ sender: Any) {
-        TwitterClient.sharedInstance?.favorite(idString: idString!, params: nil, success: {
-            self.favoritesButton.setImage(UIImage(named: "favor-icon-red"), for: .normal)
-            self.favoritesLabel.text = "\(Int(self.favoritesLabel.text!)! + 1)"
-        }, failure: { (error: Error) in
-            print(error.localizedDescription)
-        })
+        if (!favorited) {
+            TwitterClient.sharedInstance?.favorite(idString: idString!, params: nil, success: {
+                self.favorited = true
+                self.favoritesButton.setImage(UIImage(named: "favor-icon-red"), for: .normal)
+                self.favoritesLabel.text = "\(Int(self.favoritesLabel.text!)! + 1)"
+                print("favorited")
+            }, failure: { (error: Error) in
+                print(error.localizedDescription)
+            })
+        } else {
+            TwitterClient.sharedInstance?.unfavorite(idString: idString!, params: nil, success: {
+                self.favorited = false
+                self.favoritesButton.setImage(UIImage(named: "favor-icon"), for: .normal)
+                self.favoritesLabel.text = "\(Int(self.favoritesLabel.text!)! - 1)"
+            }, failure: { (error: Error) in
+                print(error.localizedDescription)
+            })
+            
+            print("unfavorited")
+        }
+    }
+    
+    func onTweetSelect() {
+        
     }
     
 }
