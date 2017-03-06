@@ -11,7 +11,6 @@ import UIKit
 class TweetViewCell: UITableViewCell {
 
     @IBOutlet weak var avatarImageView: UIImageView!
-    @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var scrennameLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var tweetLabel: UILabel!
@@ -21,6 +20,8 @@ class TweetViewCell: UITableViewCell {
     @IBOutlet weak var retweetsButton: UIButton!
     @IBOutlet weak var replyButton: UIButton!
     @IBOutlet weak var favoritesButton: UIButton!
+    @IBOutlet weak var usernameButton: UIButton!
+    
     var idString: String?
     
     var favorited: Bool = false
@@ -71,10 +72,6 @@ class TweetViewCell: UITableViewCell {
             
             print("unfavorited")
         }
-    }
-    
-    func onTweetSelect() {
-        
     }
     
 }

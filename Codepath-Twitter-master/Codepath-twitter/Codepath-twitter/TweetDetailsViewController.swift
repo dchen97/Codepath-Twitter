@@ -9,7 +9,7 @@
 import UIKit
 
 class TweetDetailsViewController: UIViewController {
-    @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var usernameButton: UIButton!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var tweetLabel: UILabel!
     @IBOutlet weak var userAvatarImageView: UIImageView!
@@ -27,7 +27,7 @@ class TweetDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.usernameLabel.text = "\((tweet?.author?.name)!)"
+        self.usernameButton.titleLabel?.text = "\((tweet?.author?.name)!)"
         self.screennameLabel.text = "@\((tweet?.author?.screenname)!)"
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.year, .month, .day, .hour, .minute]

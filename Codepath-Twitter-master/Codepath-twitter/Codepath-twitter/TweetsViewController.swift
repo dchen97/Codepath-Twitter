@@ -52,7 +52,7 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         cell.favoritesLabel.text = "\((tweet.favoritesCount))"
         cell.repliesLabel.text = "0"
         cell.retweetsLabel.text = "\((tweet.retweetCount))"
-        cell.usernameLabel.text = "\((tweet.author?.name)!)"
+        cell.usernameButton.setTitle("\((tweet.author?.name)!)", for: .normal)
         cell.scrennameLabel.text = "@\((tweet.author?.screenname)!)"
         
         let formatter = DateComponentsFormatter()
@@ -102,13 +102,30 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         //let indexPath = tableView.indexPath(for: cell)
-        let tweet = tweets[(self.tableView.indexPathForSelectedRow?.row)!]
-        let detailViewController = segue.destination as! TweetDetailsViewController
-        detailViewController.tweet = tweet
+        if (segue.identifier == "goToTweetDetails") {
+            let tweet = tweets[(self.tableView.indexPathForSelectedRow?.row)!]
+            let detailViewController = segue.destination as! TweetDetailsViewController
+            detailViewController.tweet = tweet
+        } else if (segue.identifier == "profileFromFeed" || segue.identifier == "profileFromDetails") {
+            let usernameButton = sender as! UIButton
+            let location = usernameButton.subviews[0].convert(CGPoint.zero, to: self.tableView)
+            let indexPath = tableView.indexPathForRow(at: location)
+            let tweet = self.tweets[(indexPath?.row)!]
+            let profileVC = segue.destination as! ProfileViewController
+            profileVC.user = tweet.author
+            print("\(tweet.author?.screenname)")
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //self.performSegue(withIdentifier: "goToTweetDetails", sender: self)
     }
 
+}
+
+extension UITableView {
+    func indexPath(for view: UIView) -> IndexPath? {
+        let location = view.convert(CGPoint.zero, to: self)
+        return self.indexPathForRow(at: location)
+    }
 }
