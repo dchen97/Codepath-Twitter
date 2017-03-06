@@ -1,27 +1,26 @@
 //
-//  TweetViewCell.swift
+//  ProfileTweetsTableViewCell.swift
 //  Codepath-twitter
 //
-//  Created by Diana C on 2/27/17.
+//  Created by Diana C on 3/6/17.
 //  Copyright © 2017 Diana C. All rights reserved.
 //
 
 import UIKit
 
-class TweetViewCell: UITableViewCell {
-
+class ProfileTweetsTableViewCell: UITableViewCell {
 
     @IBOutlet weak var avatarButton: UIButton!
-    @IBOutlet weak var scrennameLabel: UILabel!
-    @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var tweetLabel: UILabel!
-    @IBOutlet weak var repliesLabel: UILabel!
-    @IBOutlet weak var retweetsLabel: UILabel!
-    @IBOutlet weak var favoritesLabel: UILabel!
-    @IBOutlet weak var retweetsButton: UIButton!
-    @IBOutlet weak var replyButton: UIButton!
-    @IBOutlet weak var favoritesButton: UIButton!
     @IBOutlet weak var usernameButton: UIButton!
+    @IBOutlet weak var screennameLabel: UILabel!
+    @IBOutlet weak var timestampLabel: UILabel!
+    @IBOutlet weak var tweetLabel: UILabel!
+    @IBOutlet weak var repliesButton: UIButton!
+    @IBOutlet weak var repliesLabel: UILabel!
+    @IBOutlet weak var retweetsButton: UIButton!
+    @IBOutlet weak var retweetsLabel: UILabel!
+    @IBOutlet weak var favoritesButton: UIButton!
+    @IBOutlet weak var favoritesLabel: UILabel!
     
     var idString: String?
     
@@ -37,11 +36,8 @@ class TweetViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
-        
     }
-
-    @IBAction func onRetweetButton(_ sender: Any) {
-        print(idString!)
+    @IBAction func onFavoriteButton(_ sender: Any) {
         if (!retweeted) {
             TwitterClient.sharedInstance?.retweet(idString: idString!, params: nil, success: {
                 print("retweeted")
@@ -54,15 +50,13 @@ class TweetViewCell: UITableViewCell {
             TwitterClient.sharedInstance?.unretweet(idString: idString!, params: nil, success: { 
                 print("unretweeted")
                 self.retweetsButton.setImage(UIImage(named: "retweet-icon"), for: .normal)
-                self.retweetsLabel.text = "\(Int(self.retweetsLabel.text!)! - 1)"
             }, failure: { (error: Error) in
                 print(error.localizedDescription)
             })
         }
-        
     }
     
-    @IBAction func onFavoriteButton(_ sender: Any) {
+    @IBAction func onRetweetButton(_ sender: Any) {
         if (!favorited) {
             TwitterClient.sharedInstance?.favorite(idString: idString!, params: nil, success: {
                 self.favorited = true
@@ -84,5 +78,5 @@ class TweetViewCell: UITableViewCell {
             print("unfavorited")
         }
     }
-    
+
 }

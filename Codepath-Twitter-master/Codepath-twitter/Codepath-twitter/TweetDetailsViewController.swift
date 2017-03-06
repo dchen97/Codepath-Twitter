@@ -12,7 +12,7 @@ class TweetDetailsViewController: UIViewController {
     @IBOutlet weak var usernameButton: UIButton!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var tweetLabel: UILabel!
-    @IBOutlet weak var userAvatarImageView: UIImageView!
+    @IBOutlet weak var userAvatarButton: UIButton!
     @IBOutlet weak var repliesLabel: UILabel!
     @IBOutlet weak var retweetLabel: UILabel!
     @IBOutlet weak var favoritesLabel: UILabel!
@@ -27,7 +27,7 @@ class TweetDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.usernameButton.titleLabel?.text = "\((tweet?.author?.name)!)"
+        self.usernameButton.setTitle("\((tweet?.author?.name)!)", for: .normal)
         self.screennameLabel.text = "@\((tweet?.author?.screenname)!)"
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.year, .month, .day, .hour, .minute]
@@ -40,7 +40,9 @@ class TweetDetailsViewController: UIViewController {
         self.retweetLabel.text = "\((tweet?.retweetCount)!)"
         
         let avatarUrl = URL(string: "\((tweet?.author?.profileUrl)!)")
-        self.userAvatarImageView.setImageWith(avatarUrl!)
+        self.userAvatarButton.setTitle("", for: .normal)
+        let data = try? Data(contentsOf: avatarUrl!)
+        self.userAvatarButton.setImage(UIImage(data: data!), for: .normal)
         
         if (tweet?.favorited)! {
             self.favoriteButton.setImage(UIImage(named: "favor-icon-red"), for: .normal)
@@ -106,5 +108,13 @@ class TweetDetailsViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "profileFromDetails" || segue.identifier == "profileFromAvatarDetails") {
+            let profileVC = segue.destination as! ProfileViewController
+            profileVC.user = self.tweet?.author
+            print("\(tweet?.author?.screenname)")
+        }
+    }
 
 }

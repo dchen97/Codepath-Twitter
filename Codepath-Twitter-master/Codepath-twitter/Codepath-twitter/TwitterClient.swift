@@ -123,4 +123,12 @@ class TwitterClient: BDBOAuth1SessionManager {
             failure(error)
         })
     }
+    
+    func userTimeline(idString: String, params: NSDictionary?, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
+        get("1.1/statuses/user_timeline.json?user_id=\(idString)&count=20", parameters: params, progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
+            success()
+        }, failure: { (task: URLSessionDataTask?, error: Error) in
+            failure(error)
+        })
+    }
 }

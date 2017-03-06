@@ -18,6 +18,7 @@ class User: NSObject {
     var profileBackgroundUrl: URL?
     var tweets: [Tweet]?
     var tweetCount: Int?
+    var followingCount: Int?
     
     static let userDidLogoutNotification = NSNotification.Name("UserDidLogout")
     
@@ -40,6 +41,7 @@ class User: NSObject {
             profileBackgroundUrl = URL(string: profileBackgroundString)
         }
         tweetCount = dictionary["statuses_count"] as? Int
+        followingCount = dictionary["friends_count"] as? Int
     }
     
     static var _currentUser: User?
