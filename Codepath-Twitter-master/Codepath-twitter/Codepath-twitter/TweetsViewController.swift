@@ -61,9 +61,9 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let timestamp = formatter.string(from: tweet.timestamp!, to: NSDate() as Date)
         cell.timeLabel.text = "\((timestamp)!)"
         
-        let avatarUrl = URL(string: "\((tweet.author?.profileUrl)!)")
+        let avatarUrl = tweet.author?.profileUrl!
         cell.avatarButton.setTitle("", for: .normal)
-        cell.avatarButton.setImageFor(.normal, with: avatarUrl!)
+        cell.avatarImageView.setImageWith(avatarUrl!)
         
         
         if (tweet.favorited) {
@@ -109,12 +109,15 @@ class TweetsViewController: UIViewController, UITableViewDelegate, UITableViewDa
             detailViewController.tweet = tweet
         } else if (segue.identifier == "profileFromFeed" || segue.identifier == "profileFromDetails" || segue.identifier == "profileFromAvatar") {
             let usernameButton = sender as! UIButton
-            let location = usernameButton.subviews[0].convert(CGPoint.zero, to: self.tableView)
+            let location = usernameButton.imageView!.convert(CGPoint.zero, to: self.tableView)
             let indexPath = tableView.indexPathForRow(at: location)
             let tweet = self.tweets[(indexPath?.row)!]
             let profileVC = segue.destination as! ProfileViewController
             profileVC.user = tweet.author
             print("\(tweet.author?.screenname)")
+        } else if (segue.identifier == "selfFromFeed") {
+            let profileVC = segue.destination as! ProfileViewController
+            profileVC.user = User.currentUser!
         }
     }
     

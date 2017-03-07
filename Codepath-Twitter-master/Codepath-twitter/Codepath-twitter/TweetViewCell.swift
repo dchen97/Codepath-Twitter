@@ -22,6 +22,7 @@ class TweetViewCell: UITableViewCell {
     @IBOutlet weak var replyButton: UIButton!
     @IBOutlet weak var favoritesButton: UIButton!
     @IBOutlet weak var usernameButton: UIButton!
+    @IBOutlet weak var avatarImageView: UIImageView!
     
     var idString: String?
     

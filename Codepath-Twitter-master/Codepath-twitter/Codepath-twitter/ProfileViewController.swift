@@ -12,13 +12,11 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var tweetCountLabel: UILabel!
     @IBOutlet weak var followingCountLabel: UILabel!
     @IBOutlet weak var followerCountLabel: UILabel!
-    @IBOutlet weak var followersView: UIView!
-    @IBOutlet weak var followingView: UIView!
-    @IBOutlet weak var tweetsView: UIView!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var screennameLabel: UILabel!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var backgroundImageView: UIImageView!
+    @IBOutlet weak var tableView: UITableView!
     
     var user: User?
     var tweets: [Tweet]?
@@ -28,20 +26,21 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         print((user?.name)!)
         
-        self.navigationController?.title = "\((user?.name)!)"
+        TwitterClient.sharedInstance?.homeTimeline(success: { (tweets: [Tweet]) in
+            self.tweets = tweets
+            self.tableView.reloadData()
+        }, failure: { (error: Error) in
+            print(error.localizedDescription)
+        })
         
-        followersView.layer.borderColor = UIColor.darkGray.cgColor
-        followersView.layer.borderWidth = 0.5
-        followingView.layer.borderColor = UIColor.darkGray.cgColor
-        followingView.layer.borderWidth = 0.5
-        tweetsView.layer.borderColor = UIColor.darkGray.cgColor
-        tweetsView.layer.borderWidth = 0.5
+        self.navigationController?.title = "\((user?.name)!)"
         
         usernameLabel.text = user?.name!
         screennameLabel.text = user?.screenname!
         
         let avatarUrl = URL(string: "\((user?.profileUrl)!))")
-        profileImageView.setImageWith(avatarUrl!)
+        print((user?.profileUrl)!)
+        self.profileImageView.setImageWith(avatarUrl!)
         
         let backgroundUrl = URL(string: "\((user?.profileBackgroundUrl)!)")
         backgroundImageView.setImageWith(backgroundUrl!)
@@ -73,7 +72,11 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         let tweet = tweets?[indexPath.row]
         let avatarUrl = URL(string: "\(user?.profileUrl!)")
-        cell.avatarButton.imageView?.setImageWith(avatarUrl!)
+        if let pictureData = NSData(contentsOf: avatarUrl!) {
+            let image = UIImage(data: pictureData as Data)
+            cell.avatarButton.setImage(image, for: .normal)
+        }
+        //cell.avatarButton.imageView?.setImageWith(avatarUrl!)
         
         cell.favoritesLabel.text = "\((tweet?.favoritesCount))"
         cell.repliesLabel.text = "0"
@@ -92,5 +95,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         // Pass the selected object to the new view controller.
     }
     */
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "selfFromProfile") {
+            let profileVC = segue.destination as! ProfileViewController
+            profileVC.user = User.currentUser!
+        }
+    }
 
 }

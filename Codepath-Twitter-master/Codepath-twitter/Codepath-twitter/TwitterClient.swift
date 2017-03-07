@@ -131,4 +131,12 @@ class TwitterClient: BDBOAuth1SessionManager {
             failure(error)
         })
     }
+    
+    func tweet(status: String, params: NSDictionary?, success: @escaping() -> (), failure: @escaping (Error) -> ()) {
+        post("1.1/statuses/update.json?status=\(status.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed)!)", parameters: params, progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
+            success()
+        }) { (task: URLSessionDataTask?, error: Error) in
+            failure(error)
+        }
+    }
 }

@@ -20,6 +20,7 @@ class TweetDetailsViewController: UIViewController {
     @IBOutlet weak var replyButton: UIButton!
     @IBOutlet weak var retweetButton: UIButton!
     @IBOutlet weak var screennameLabel: UILabel!
+    @IBOutlet weak var avatarImageView: UIImageView!
     
     var tweet: Tweet?
     
@@ -41,8 +42,7 @@ class TweetDetailsViewController: UIViewController {
         
         let avatarUrl = URL(string: "\((tweet?.author?.profileUrl)!)")
         self.userAvatarButton.setTitle("", for: .normal)
-        let data = try? Data(contentsOf: avatarUrl!)
-        self.userAvatarButton.setImage(UIImage(data: data!), for: .normal)
+        self.avatarImageView.setImageWith(avatarUrl!)
         
         if (tweet?.favorited)! {
             self.favoriteButton.setImage(UIImage(named: "favor-icon-red"), for: .normal)
@@ -114,6 +114,14 @@ class TweetDetailsViewController: UIViewController {
             let profileVC = segue.destination as! ProfileViewController
             profileVC.user = self.tweet?.author
             print("\(tweet?.author?.screenname)")
+        } else if (segue.identifier == "selfFromDetails") {
+            let profileVC = segue.destination as! ProfileViewController
+//            TwitterClient.sharedInstance?.currentAccount(success: { (user: User) in
+                profileVC.user = User.currentUser!
+//            }, failure: { (error: Error) in
+//                print(error.localizedDescription)
+//            })
+            
         }
     }
 
